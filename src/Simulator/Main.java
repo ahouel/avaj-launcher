@@ -5,6 +5,14 @@ import java.io.File;
 import Flyables.Flyable;
 import Weather.Simulation;
 
+
+/*
+ * Minimal aircraft simulation program based on a given UML class diagram.
+ * Uses class a Parser to get the inputs, a Writer for the output, and a Simulation
+ * to run.
+ * Should only take one argument : the input file where the scenario is written.
+ */
+
 public class Main {
 	public static void main(String[] argv)
 	{

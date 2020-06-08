@@ -5,13 +5,29 @@ import Weather.Simulation;
 import Weather.WeatherProvider;
 import Weather.WeatherTower;
 
+
+/*
+ * Jetplane
+ */
+
 public class JetPlane extends Aircraft implements Flyable {
 	private WeatherTower	weatherTower;
+	
+	
+	/*
+	 * Constructor
+	 */
 	
 	protected JetPlane(String name, Coordinates coordinates) {
 		super(name, coordinates);
 	}
 
+	
+	/*
+	 * (non-Javadoc)
+	 * @see Flyables.Flyable#updateConditions()
+	 */
+	
 	@Override
 	public void updateConditions() {
 		String	weather;
@@ -30,6 +46,12 @@ public class JetPlane extends Aircraft implements Flyable {
 		}
 	}
 
+	
+	/*
+	 * (non-Javadoc)
+	 * @see Flyables.Flyable#registerTower(Weather.WeatherTower)
+	 */
+	
 	@Override
 	public void registerTower(WeatherTower weatherTower) {
 		this.weatherTower = weatherTower;

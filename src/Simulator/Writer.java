@@ -5,12 +5,25 @@ import java.io.IOException;
 import java.util.Hashtable;
 import Weather.Simulation;
 
+
+/*
+ * Class to write the output file describing what happened during the simulation.
+ * Logs can be set to true to print messages on the shell while writing the file.
+ * Contains the name of the file and the output sentences of each aircraft depending
+ * on the weather.
+ */
+
 public class Writer {
 	private final boolean										logs = false;
 	private final String										fileName = "simulation.txt";
 	private static Hashtable<String, Hashtable<String, String>>	aircraftStr;
 	private static Writer										writer = new Writer();
 	private FileWriter											myWriter;
+	
+	
+	/*
+	 * Constructor
+	 */
 	
 	private Writer()
 	{
@@ -21,6 +34,12 @@ public class Writer {
 		}
 		Writer.initializer();
 	}
+	
+	
+	/*
+	 * Initializes the HashTable containing strings for messages of aircrafts depending
+	 * on the current weather.
+	 */
 	
 	private static void initializer()
 	{
@@ -35,12 +54,12 @@ public class Writer {
 			case "RAIN":
 				baloonStr.put(weather, "Damn you rain ! You mesed up my baloon.");
 				jetPlaneStr.put(weather, "It's raining. Better watch out for lightings.");
-				helicopterStr.put(weather, "My helix protect me from this rain.");
+				helicopterStr.put(weather, "My helix protects me from this rain.");
 				break;
 			case "FOG":
-				baloonStr.put(weather, "Let's get a bit higher to get out of the fog.");
-				jetPlaneStr.put(weather, "It's time to trust our softwares, i can't see anything in the fog.");
-				helicopterStr.put(weather, "The fog is too dangerous !");
+				baloonStr.put(weather, "Am i a cloud ? I can't see a meter away !");
+				jetPlaneStr.put(weather, "Time to trust my softwares, i can't see anything in the fog.");
+				helicopterStr.put(weather, "We need to advance slowly and pay attention with this low visibility.");
 				break;
 			case "SUN":
 				baloonStr.put(weather, "Let's enjoy the good weather and take some pics.");
@@ -60,25 +79,10 @@ public class Writer {
 		Writer.aircraftStr.put(Simulation.helicopterKey, helicopterStr);
 	}
 	
-	public static Writer getWriter()
-	{
-		return Writer.writer;
-	}
 	
-	private static String getWeatherStr(String flyableKey, String weather)
-	{
-		return Writer.aircraftStr.get(flyableKey).get(weather);
-	}
-	
-	private void addLine(String line)
-	{
-		try {
-			this.myWriter.write(line + "\n");
-		} catch (IOException e) {
-			System.err.println("Error : " + MyErrors.error("WRITE"));
-			Writer.writer.closeFile();
-		}
-	}
+	/*
+	 * Close the file when writing is done
+	 */
 	
 	public void closeFile()
 	{
@@ -91,45 +95,100 @@ public class Writer {
 		System.out.println("Successfully wrote " + this.fileName);
 	}
 	
-	private static String flyableStr(String flyable, String name, long id)
+	
+	/*
+	 * Add a new line in the file
+	 */
+	
+	private void addLine(String line)
+	{
+		try {
+			this.myWriter.write(line + "\n");
+		} catch (IOException e) {
+			System.err.println("Error : " + MyErrors.error("WRITE"));
+			Writer.writer.closeFile();
+		}
+	}
+	
+	
+	/*
+	 * Get the message of an aircraft depending on the current weather.
+	 */
+	
+	private static String getWeatherStr(String flyableKey, String weather)
+	{
+		return Writer.aircraftStr.get(flyableKey).get(weather);
+	}
+	
+	
+	/*
+	 * Get the string of a flyable.
+	 */
+	
+	private static String getFlyableStr(String flyable, String name, long id)
 	{
 		return flyable + "#" + name + "(" + String.valueOf(id) + ")";
 	}
+	
+	
+	/*
+	 * Message written when an aircraft register to a weather tower.
+	 */
 	
 	public static void registerTowerMsg(String flyable, String name, long id)
 	{
 		String	str;
 		
-		str = "Tower says: " + Writer.flyableStr(flyable, name, id)
+		str = "Tower says: " + Writer.getFlyableStr(flyable, name, id)
 				+ " registered to weather tower.";
 		Writer.writer.addLine(str);
 		if (Writer.writer.logs)
 			System.out.println(str);
 	}
 	
+	
+	/*
+	 * Message written when an aircraft unregister from a weather tower.
+	 */
+	
 	public static void unregisterTowerMsg(String flyable, String name, long id)
 	{
 		String	str;
 		
-		str = Writer.flyableStr(flyable, name, id) + " landing.";
+		str = Writer.getFlyableStr(flyable, name, id) + " landing.";
 		Writer.writer.addLine(str);
 		if (Writer.writer.logs)
 			System.out.println(str);
-		str = "Tower says : " + Writer.flyableStr(flyable, name, id)
+		str = "Tower says : " + Writer.getFlyableStr(flyable, name, id)
 				+ " unregistered from weather tower.";
 		Writer.writer.addLine(str);
 		if (Writer.writer.logs)
 			System.out.println(str);
 	}
 	
+	
+	/*
+	 * Message written by an aircraft under a certain weather
+	 */
+	
 	public static void weatherChangeMsg(String weather, String flyable, String name, long id)
 	{
 		String	str;
 
-		str = Writer.flyableStr(flyable, name, id) + ": "
+		str = Writer.getFlyableStr(flyable, name, id) + ": "
 				+ Writer.getWeatherStr(flyable, weather);
 		Writer.writer.addLine(str);
 		if (Writer.writer.logs)
 			System.out.println(str);
+	}
+	
+	
+	/*
+	 * Getter
+	 */
+	
+	public static Writer getWriter()
+	{
+		return Writer.writer;
 	}
 }

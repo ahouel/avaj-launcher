@@ -10,6 +10,12 @@ import Flyables.Flyable;
 import Flyables.Helicopter;
 import Flyables.JetPlane;
 
+/*
+ * Class managing the simulation, including the names of aircrafts, the number of loop changing the weather,
+ * the types of weather, and the modifiers applying on the coordinates of the aircrafts depending on weather.
+ * Contains an aircraftFactory which build aircrafts, and the weatherTower used to change weather.
+ */
+
 public class Simulation {
 	public static final String									baloonKey = Baloon.class.getSimpleName();
 	public static final String									jetPlaneKey = JetPlane.class.getSimpleName();
@@ -30,6 +36,10 @@ public class Simulation {
 	private WeatherTower										weatherTower;
 	private AircraftFactory										aircraftFactory;
 	
+	/*
+	 * Constructor
+	 */
+	
 	public Simulation(int simulationsNb)
 	{
 		this.initializeCoo();
@@ -38,6 +48,11 @@ public class Simulation {
 		this.aircraftFactory = new AircraftFactory();
 	}
 
+	
+	/*
+	 * Initialize coordinates modifier for aircrafts depending on the weather
+	 */
+	
 	private void initializeCoo()
 	{
 		Hashtable<String, int[]> baloonCoo = new Hashtable<String, int[]>();
@@ -76,10 +91,10 @@ public class Simulation {
 		Simulation.cooModifier.put(Simulation.helicopterKey, helicopterCoo);
 	}
 	
-	public static int[] getCooModifier(String flyableKey, String weather)
-	{
-		return Simulation.cooModifier.get(flyableKey).get(weather);
-	}
+	
+	/*
+	 * Register a newly created flyable
+	 */
 	
 	public void addFlyable(Flyable flyable)
 	{
@@ -87,10 +102,10 @@ public class Simulation {
 		flyable.registerTower(this.weatherTower);
 	}
 	
-	public AircraftFactory getFactory()
-	{
-		return this.aircraftFactory;
-	}
+	
+	/*
+	 * Starting the simulation
+	 */
 	
 	public void start()
 	{
@@ -98,5 +113,20 @@ public class Simulation {
 		{
 			this.weatherTower.changeWeather();
 		}
+	}
+	
+	
+	/*
+	 * Getters
+	 */
+	
+	public static int[] getCooModifier(String flyableKey, String weather)
+	{
+		return Simulation.cooModifier.get(flyableKey).get(weather);
+	}
+	
+	public AircraftFactory getFactory()
+	{
+		return this.aircraftFactory;
 	}
 }

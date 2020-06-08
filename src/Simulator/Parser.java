@@ -9,15 +9,30 @@ import Flyables.AircraftFactory;
 import Flyables.Flyable;
 import Weather.Simulation;
 
+
+/*
+ * Class to parse the input file. Keep it in track with a BufferdReader, and the current line.
+ */
+
 public class Parser {
 	private BufferedReader	input;
 	private	int				lineNb;
+	
+	
+	/*
+	 * Constructor
+	 */
 	
 	Parser(File file) throws FileNotFoundException
 	{
 		this.input = new BufferedReader(new FileReader(file));
 		this.lineNb = 0;
 	} 
+	
+	
+	/*
+	 * Read the first line (should be a positive integer) to get the number of simulations
+	 */
 	
 	int getSimulationsNb() throws Exception
 	{
@@ -32,6 +47,11 @@ public class Parser {
 		}
 		return simulationsNb;
 	}
+	
+	
+	/*
+	 * Read a line on which an aircraft's information is written, a return it as a Flyable
+	 */
 	
 	Flyable readFlyable(AircraftFactory aircraftFactory) throws Exception
 	{

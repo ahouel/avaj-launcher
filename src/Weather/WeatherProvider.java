@@ -4,14 +4,30 @@ import java.util.Random;
 
 import Flyables.Coordinates;
 
+
+/*
+ * Provide weather conditions
+ */
+
 public class WeatherProvider {
 	private static WeatherProvider weatherProvider = new WeatherProvider();
 	private static String[] weather;
+	
+	
+	/*
+	 * Constructor
+	 */
 	
 	private WeatherProvider()
 	{
 		WeatherProvider.weather = Simulation.weather;
 	}
+	
+	
+	/*
+	 * Getters
+	 * The algoritm for a new weather is based on a RNG.
+	 */
 	
 	public static WeatherProvider getProvider()
 	{
